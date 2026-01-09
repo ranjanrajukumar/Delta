@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="Delta.API/Delta.API.csproj" Id="d3f3b978-ac22-48ac-8528-e7711c15f881">
+    <BuildDependency Project="Delta.Application/Delta.Application.csproj" />
+    <BuildDependency Project="Delta.Core/Delta.Core.csproj" />
+    <BuildDependency Project="Delta.Domain/Delta.Domain.csproj" />
+    <BuildDependency Project="Delta.Infrastructure/Delta.Infrastructure.csproj" />
+  </Project>
+  <Project Path="Delta.Application/Delta.Application.csproj" Id="3c4d0c2c-7090-4278-9c96-39d70d89b775" />
+  <Project Path="Delta.Core/Delta.Core.csproj" Id="b7a7bc72-eda5-4331-9fdd-6fe361d9a66f" />
+  <Project Path="Delta.Domain/Delta.Domain.csproj" Id="6f1f0b63-9354-489c-9de6-b6b88c4b9b7a" />
+  <Project Path="Delta.Infrastructure/Delta.Infrastructure.csproj" Id="8674f655-d4be-4a06-9416-73ed929f5bce" />
+</Solution>
