@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Delta.Domain\Delta.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Dapper\" />
+  </ItemGroup>
+
 </Project>

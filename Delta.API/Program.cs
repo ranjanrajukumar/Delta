@@ -5,11 +5,11 @@ using Delta.Application.Interfaces;
 using Delta.Application.Interfaces.Utilities;
 using Delta.Application.Services;
 using Delta.Application.Services.Utilities;
-using Delta.Infrastructure.Persistence;
 using Delta.Infrastructure.Repositories;
 using Delta.Infrastructure.Repositories.Utilities;
 using System.Text;
 using IUserService = Delta.Application.Interfaces.Utilities.IUserService;
+using Delta.Infrastructure.Persistence.EF;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,10 +2,10 @@
 using Delta.Application.DTOs.Utilities;
 using Delta.Application.Interfaces.Utilities;
 using Delta.Domain.Entities.Utilities;
-using Delta.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Delta.Infrastructure.Persistence.EF;
 
 namespace Delta.Infrastructure.Repositories.Utilities
 {

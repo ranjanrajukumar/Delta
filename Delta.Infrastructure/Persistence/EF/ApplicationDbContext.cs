@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Delta.Domain.Entities.Utilities;
 
-namespace Delta.Infrastructure.Persistence
+namespace Delta.Infrastructure.Persistence.EF
 {
     public class ApplicationDbContext : DbContext
     {
