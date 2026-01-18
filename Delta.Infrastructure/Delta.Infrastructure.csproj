@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Delta.Application\Delta.Application.csproj" />
     <ProjectReference Include="..\Delta.Core\Delta.Core.csproj" />
     <ProjectReference Include="..\Delta.Domain\Delta.Domain.csproj" />
+    <ProjectReference Include="..\Delta.Shared\Delta.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

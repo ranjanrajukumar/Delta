@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Delta.Application.Interfaces;
@@ -7,11 +7,17 @@ using Delta.Application.Services;
 using Delta.Application.Services.Utilities;
 using Delta.Infrastructure.Repositories;
 using Delta.Infrastructure.Repositories.Utilities;
+using Delta.Infrastructure.Persistence.EF;
+using Delta.Shared.Logging;   // ✅ ADD THIS
 using System.Text;
 using IUserService = Delta.Application.Interfaces.Utilities.IUserService;
-using Delta.Infrastructure.Persistence.EF;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+// ✅ GLOBAL LOGGING (MUST BE HERE)
+builder.Host.UseDeltaLogging();
 
 // ---------------------- Controllers ----------------------
 builder.Services.AddControllers();

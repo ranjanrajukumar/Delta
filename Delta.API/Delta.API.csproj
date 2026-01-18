@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Delta.Application\Delta.Application.csproj" />
     <ProjectReference Include="..\Delta.Core\Delta.Core.csproj" />
     <ProjectReference Include="..\Delta.Infrastructure\Delta.Infrastructure.csproj" />
+    <ProjectReference Include="..\Delta.Shared\Delta.Shared.csproj" />
   </ItemGroup>
 
 </Project>
