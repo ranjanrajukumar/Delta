@@ -22,16 +22,27 @@ namespace Delta.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
+            modelBuilder.Entity("Delta.Domain.Entities.Student.Student", b =>
                 {
-                    b.Property<int>("MenuID")
+                    b.Property<int>("StudentID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentID"));
+
+                    b.Property<string>("AadharNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("AddOnDt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApaarID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AuthAdd")
                         .HasColumnType("nvarchar(max)");
@@ -42,62 +53,126 @@ namespace Delta.Infrastructure.Migrations
                     b.Property<string>("AuthLstEdit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("BirthID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BloodGroup")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DelOnDt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("DelStatus")
-                        .HasColumnType("bit");
+                    b.Property<int>("DelStatus")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DisplayName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("DistID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("EditOnDt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IconClass")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("IconName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsPop")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MenuDescription")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("MenuOrder")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MenuTitle")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MenuUrl")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentID")
+                    b.Property<string>("FatherOccupation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Income")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MotherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MotherOccupation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PAN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PH")
                         .HasColumnType("int");
 
-                    b.Property<string>("UrlMenuPath")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("PassportNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MenuID");
+                    b.Property<string>("PerCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ParentID");
+                    b.Property<string>("PerCountry")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("TblMenuItem");
+                    b.Property<string>("PerPIN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Photo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("PresentAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuotaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Relation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReligionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StudentID");
+
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("Delta.Domain.Entities.Utilities.User", b =>
@@ -191,20 +266,6 @@ namespace Delta.Infrastructure.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("tblUser");
-                });
-
-            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
-                {
-                    b.HasOne("Delta.Domain.Entities.Utilities.Menu", "ParentMenu")
-                        .WithMany("ChildMenus")
-                        .HasForeignKey("ParentID");
-
-                    b.Navigation("ParentMenu");
-                });
-
-            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
-                {
-                    b.Navigation("ChildMenus");
                 });
 #pragma warning restore 612, 618
         }

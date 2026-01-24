@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Delta.Domain.Common;
+using Delta.Domain.Entities.Student;
 using Delta.Domain.Entities.Utilities;
-using Delta.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace Delta.Infrastructure.Persistence.EF
 {
@@ -14,6 +15,8 @@ namespace Delta.Infrastructure.Persistence.EF
         // DbSets
         public DbSet<User> Users { get; set; }
         public DbSet<Menu> Menu { get; set; }
+
+        public DbSet<Student> Students { get; set; }
 
         // 🔥 AUDIT + SOFT DELETE HANDLING
         public override int SaveChanges()

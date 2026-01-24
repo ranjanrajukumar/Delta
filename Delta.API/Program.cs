@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Delta.Application.Interfaces;
+﻿using Delta.Application.Interfaces;
 using Delta.Application.Interfaces.Utilities;
 using Delta.Application.Services;
 using Delta.Application.Services.Utilities;
+using Delta.Infrastructure.Persistence.EF;
 using Delta.Infrastructure.Repositories;
 using Delta.Infrastructure.Repositories.Utilities;
-using Delta.Infrastructure.Persistence.EF;
 using Delta.Shared.Logging;   // ✅ ADD THIS
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using IUserService = Delta.Application.Interfaces.Utilities.IUserService;
 
@@ -21,6 +23,21 @@ builder.Host.UseDeltaLogging();
 
 // ---------------------- Controllers ----------------------
 builder.Services.AddControllers();
+
+// ---------------------- API Versioning ----------------------
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 // ---------------------- Swagger ----------------------
 builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +53,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 
 // Services
