@@ -17,6 +17,7 @@ namespace Delta.Infrastructure.Persistence.EF
         public DbSet<Menu> Menu { get; set; }
 
         public DbSet<Student> Students { get; set; }
+        public DbSet<MenuFormRight> MenuFormRights { get; set; }
 
         // 🔥 AUDIT + SOFT DELETE HANDLING
         public override int SaveChanges()
@@ -59,10 +60,36 @@ namespace Delta.Infrastructure.Persistence.EF
             }
         }
 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        //    {
+        //        if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+        //        {
+        //            var method = typeof(ApplicationDbContext)
+        //                .GetMethod(nameof(SetSoftDeleteFilter),
+        //                    System.Reflection.BindingFlags.NonPublic |
+        //                    System.Reflection.BindingFlags.Static)
+        //                ?.MakeGenericMethod(entityType.ClrType);
+
+        //            method?.Invoke(null, new object[] { modelBuilder });
+        //        }
+        //    }
+        //}
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Decimal precision fix
+            modelBuilder.Entity<Student>()
+                .Property(x => x.Income)
+                .HasPrecision(18, 2);
+
+            // Soft delete filter
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))

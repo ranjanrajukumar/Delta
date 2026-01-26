@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Delta.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260120111454_AddStudentTable")]
-    partial class AddStudentTable
+    [Migration("20260125150636_IntialUp")]
+    partial class IntialUp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,7 @@ namespace Delta.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Income")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Mobile")
@@ -176,6 +177,136 @@ namespace Delta.Infrastructure.Migrations
                     b.HasKey("StudentID");
 
                     b.ToTable("Student");
+                });
+
+            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
+                {
+                    b.Property<int>("MenuID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuID"));
+
+                    b.Property<DateTime>("AddOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AuthAdd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthDel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthLstEdit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("DelOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DelStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("EditOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IconClass")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IconName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("IsPop")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MenuDescription")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("MenuOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MenuTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MenuUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("ParentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UrlMenuPath")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("MenuID");
+
+                    b.HasIndex("ParentID");
+
+                    b.ToTable("TblMenuItem");
+                });
+
+            modelBuilder.Entity("Delta.Domain.Entities.Utilities.MenuFormRight", b =>
+                {
+                    b.Property<int>("IdCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCode"));
+
+                    b.Property<DateTime>("AddOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AuthAdd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthDel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthLstEdit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ButtonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ButtonText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DelOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DelStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EditOnDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tab")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdCode");
+
+                    b.ToTable("tblMenuFormRight");
                 });
 
             modelBuilder.Entity("Delta.Domain.Entities.Utilities.User", b =>
@@ -269,6 +400,20 @@ namespace Delta.Infrastructure.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("tblUser");
+                });
+
+            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
+                {
+                    b.HasOne("Delta.Domain.Entities.Utilities.Menu", "ParentMenu")
+                        .WithMany("ChildMenus")
+                        .HasForeignKey("ParentID");
+
+                    b.Navigation("ParentMenu");
+                });
+
+            modelBuilder.Entity("Delta.Domain.Entities.Utilities.Menu", b =>
+                {
+                    b.Navigation("ChildMenus");
                 });
 #pragma warning restore 612, 618
         }

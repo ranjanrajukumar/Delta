@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\Utilities\IMenuTabRepository.cs" />
     <Compile Remove="Services\Utilities\IUserService.cs" />
   </ItemGroup>
 

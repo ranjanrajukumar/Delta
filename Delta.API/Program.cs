@@ -54,11 +54,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IMenuFormRightsRepository, MenuFormRightsRepository>();
 
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<MenuService>();
+builder.Services.AddScoped<IMenuFormRightsService, MenuFormRightsService>();
 
 // ? Enable CORS
 builder.Services.AddCors(options =>

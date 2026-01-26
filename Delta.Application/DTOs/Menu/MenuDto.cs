@@ -13,5 +13,11 @@ namespace Delta.Application.DTOs.Menu
         public int MenuOrder { get; set; }
 
         public List<MenuDto> Children { get; set; } = new();
+
+        // 🔥 Delta extensions (only for leaf menus)
+        public List<ButtonDto> FormButtons { get; set; } = new(); // Tab = 0
+        public List<TabDto> Tabs { get; set; } = new();           // Tab = 1
+        public List<ButtonDto> Reports { get; set; } = new();     // Tab = 2
+
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Delta.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddStudentTable : Migration
+    public partial class IntialUp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +29,7 @@ namespace Delta.Infrastructure.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Income = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Income = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     BloodGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PAN = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -60,6 +60,65 @@ namespace Delta.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Student", x => x.StudentID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblMenuFormRight",
+                columns: table => new
+                {
+                    IdCode = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuId = table.Column<int>(type: "int", nullable: false),
+                    ButtonId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ButtonText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tab = table.Column<int>(type: "int", nullable: false),
+                    AuthAdd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthLstEdit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthDel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddOnDt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EditOnDt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DelOnDt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DelStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblMenuFormRight", x => x.IdCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TblMenuItem",
+                columns: table => new
+                {
+                    MenuID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentID = table.Column<int>(type: "int", nullable: true),
+                    MenuTitle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    MenuUrl = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    MenuDescription = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    IsPop = table.Column<int>(type: "int", nullable: false),
+                    UrlMenuPath = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    MenuOrder = table.Column<int>(type: "int", nullable: false),
+                    IconClass = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    IconName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AuthAdd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthLstEdit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthDel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddOnDt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EditOnDt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DelOnDt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DelStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TblMenuItem", x => x.MenuID);
+                    table.ForeignKey(
+                        name: "FK_TblMenuItem_TblMenuItem_ParentID",
+                        column: x => x.ParentID,
+                        principalTable: "TblMenuItem",
+                        principalColumn: "MenuID");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +158,11 @@ namespace Delta.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_tblUser", x => x.UserId);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblMenuItem_ParentID",
+                table: "TblMenuItem",
+                column: "ParentID");
         }
 
         /// <inheritdoc />
@@ -106,6 +170,12 @@ namespace Delta.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Student");
+
+            migrationBuilder.DropTable(
+                name: "tblMenuFormRight");
+
+            migrationBuilder.DropTable(
+                name: "TblMenuItem");
 
             migrationBuilder.DropTable(
                 name: "tblUser");
