@@ -1,9 +1,7 @@
-﻿using Delta.Application.DTOs;
-using Delta.Application.DTOs.Utilities;
-using Delta.Application.Interfaces;
+﻿using Delta.Application.DTOs.Utilities;
 using Delta.Application.Interfaces.Utilities;
-using Delta.Domain.Entities;
 using Delta.Domain.Entities.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +12,9 @@ namespace Delta.Application.Services.Utilities
         private readonly IUserRepository _repo;
         private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository repo, ITokenService tokenService)
+        public UserService(
+            IUserRepository repo,
+            ITokenService tokenService)
         {
             _repo = repo;
             _tokenService = tokenService;
@@ -35,7 +35,7 @@ namespace Delta.Application.Services.Utilities
             var user = new User
             {
                 UserName = dto.UserName,
-                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),  // FIXED ❗//dto.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Email = dto.Email,
                 FullName = dto.FullName,
                 MobileNo = dto.MobileNo,
@@ -70,23 +70,24 @@ namespace Delta.Application.Services.Utilities
             return await _repo.Delete(id);
         }
 
-
-
-
+        // ✅ FIXED LOGIN METHOD
         public async Task<LoginResponseDto?> AuthenticateAsync(LoginRequestDto loginDto)
         {
             var user = await _repo.GetByUserNameAsync(loginDto.UserName);
 
-            if (user == null || string.IsNullOrEmpty(user.Password) ||
+            if (user == null ||
+                string.IsNullOrEmpty(user.Password) ||
                 !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
             {
                 return null;
             }
 
             var token = _tokenService.GenerateToken(
-                user.UserId.ToString(),
-                user.Email ?? "",
-                user.UserType ?? ""   // "Admin", "Teacher", etc.
+                user.UserId,                 // int
+                user.UserName,               // username
+                user.Email ?? string.Empty,  // email
+                user.UserType ?? "User",     // role
+                user.Category ?? string.Empty
             );
 
             return new LoginResponseDto
@@ -95,7 +96,5 @@ namespace Delta.Application.Services.Utilities
                 Expiration = DateTime.UtcNow.AddMinutes(60)
             };
         }
-
-
     }
 }

@@ -1,13 +1,13 @@
-﻿using Delta.Domain.Entities.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Delta.Application.Interfaces.Utilities
+﻿namespace Delta.Application.Interfaces.Utilities
 {
     public interface ITokenService
     {
-        string GenerateToken(string userId, string email, string role);
+        string GenerateToken(
+            int userId,
+            string userName,
+            string email,
+            string role,
+            string category
+        );
     }
-
 }

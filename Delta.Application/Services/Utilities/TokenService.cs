@@ -1,5 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using Delta.Application.Interfaces.Utilities;
+﻿using Delta.Application.Interfaces.Utilities;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,7 +13,11 @@ public class TokenService : ITokenService
     private readonly string _audience;
     private readonly double _expiryMinutes;
 
-    public TokenService(string secretKey, string issuer, string audience, double expiryMinutes)
+    public TokenService(
+        string secretKey,
+        string issuer,
+        string audience,
+        double expiryMinutes)
     {
         _secretKey = secretKey;
         _issuer = issuer;
@@ -19,17 +25,30 @@ public class TokenService : ITokenService
         _expiryMinutes = expiryMinutes;
     }
 
-    public string GenerateToken(string userId, string email, string role)
+    public string GenerateToken(
+        int userId,
+        string userName,
+        string email,
+        string role,
+        string category)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, userId),
+            // ✅ Standard JWT claims
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim(ClaimTypes.Name, userName),
             new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, role)
+            new Claim(ClaimTypes.Role, role),
+
+            // ✅ Custom business claim
+            new Claim("Category", category)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_secretKey));
+
+        var creds = new SigningCredentials(
+            key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: _issuer,

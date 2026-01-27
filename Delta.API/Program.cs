@@ -5,20 +5,22 @@ using Delta.Application.Services.Utilities;
 using Delta.Infrastructure.Persistence.EF;
 using Delta.Infrastructure.Repositories;
 using Delta.Infrastructure.Repositories.Utilities;
-using Delta.Shared.Logging;   // ✅ ADD THIS
+using Delta.Shared.Logging;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
 using System.Text;
+using Vidya.API.Middleware;
+
 using IUserService = Delta.Application.Interfaces.Utilities.IUserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-// ✅ GLOBAL LOGGING (MUST BE HERE)
+// ---------------------- GLOBAL LOGGING ----------------------
 builder.Host.UseDeltaLogging();
 
 // ---------------------- Controllers ----------------------
@@ -46,37 +48,41 @@ builder.Services.AddSwaggerGen();
 // ---------------------- DbContext ----------------------
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // ---------------------- Dependency Injection ----------------------
+
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IMenuFormRightsRepository, MenuFormRightsRepository>();
 
-
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<MenuService>();
 builder.Services.AddScoped<IMenuFormRightsService, MenuFormRightsService>();
 
-// ? Enable CORS
+// User Context (Token + Claims)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContext, UserContext>();
+
+// ---------------------- CORS ----------------------
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
 });
 
-
-// JWT Settings from appsettings.json
+// ---------------------- JWT Settings ----------------------
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
-// TokenService (Clean Architecture: pass settings from API)
-builder.Services.AddScoped<ITokenService>(sp =>
+// Token Service
+builder.Services.AddScoped<ITokenService>(_ =>
     new TokenService(
         jwtSettings["SecretKey"],
         jwtSettings["Issuer"],
@@ -99,36 +105,33 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"])),
+
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtSettings["SecretKey"])
+        ),
+
         ClockSkew = TimeSpan.Zero
     };
 });
 
 var app = builder.Build();
 
-// ---------------------- Apply Pending Migrations (Optional) ----------------------
-// using (var scope = app.Services.CreateScope())
-// {
-//     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//     db.Database.Migrate(); // Applies any pending migrations
-// }
-
-// ---------------------- Middleware ----------------------
+// ---------------------- Middleware Pipeline ----------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// ? Middlewares
 app.UseHttpsRedirection();
 
-
 app.UseCors("AllowAll");
-// JWT authentication middleware
+
 app.UseAuthentication();
+app.UseMiddleware<UserContextMiddleware>(); // ✅ Token + Claims
 app.UseAuthorization();
 
 app.MapControllers();
