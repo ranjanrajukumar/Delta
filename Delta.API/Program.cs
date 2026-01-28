@@ -1,9 +1,12 @@
 ﻿using Delta.Application.Interfaces;
+using Delta.Application.Interfaces.Common;
 using Delta.Application.Interfaces.Utilities;
 using Delta.Application.Services;
+using Delta.Application.Services.Common;
 using Delta.Application.Services.Utilities;
 using Delta.Infrastructure.Persistence.EF;
 using Delta.Infrastructure.Repositories;
+using Delta.Infrastructure.Repositories.Common;
 using Delta.Infrastructure.Repositories.Utilities;
 using Delta.Shared.Logging;
 
@@ -64,6 +67,8 @@ builder.Services.AddScoped<IMenuFormRightsRepository, MenuFormRightsRepository>(
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<MenuService>();
 builder.Services.AddScoped<IMenuFormRightsService, MenuFormRightsService>();
+builder.Services.AddScoped<ICommonSearchService, CommonSearchService>();
+builder.Services.AddScoped<ICommonSearchRepository, CommonSearchRepository>();
 
 // User Context (Token + Claims)
 builder.Services.AddHttpContextAccessor();
