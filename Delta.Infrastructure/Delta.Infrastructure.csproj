@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -29,10 +31,6 @@
     <ProjectReference Include="..\Delta.Core\Delta.Core.csproj" />
     <ProjectReference Include="..\Delta.Domain\Delta.Domain.csproj" />
     <ProjectReference Include="..\Delta.Shared\Delta.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Persistence\Dapper\" />
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@ using Delta.Application.Interfaces.Utilities;
 using Delta.Application.Services;
 using Delta.Application.Services.Common;
 using Delta.Application.Services.Utilities;
+using Delta.Infrastructure.Persistence.Dapper;
 using Delta.Infrastructure.Persistence.EF;
 using Delta.Infrastructure.Repositories;
 using Delta.Infrastructure.Repositories.Common;
@@ -54,6 +55,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+//Dapper
+builder.Services.AddScoped<IDapperContext, DapperContext>();
 
 // ---------------------- Dependency Injection ----------------------
 

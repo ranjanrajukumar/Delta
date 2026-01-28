@@ -1,21 +1,20 @@
 ﻿using Delta.Application.DTOs.Common;
 using Delta.Application.Interfaces.Common;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+using Delta.Infrastructure.Persistence.Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace Delta.Infrastructure.Repositories.Common
 {
     public class CommonSearchRepository : ICommonSearchRepository
     {
-        private readonly string _connectionString;
+        private readonly IDapperContext _context;
 
-        public CommonSearchRepository(IConfiguration configuration)
+        public CommonSearchRepository(IDapperContext context)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _context = context;
         }
 
         public async Task<CommonSearchResponseDto> SearchAsync(
@@ -27,38 +26,43 @@ namespace Delta.Infrastructure.Repositories.Common
             string otherCondition,
             string sortBy)
         {
-            var columns = displayColumns.Split(',')
-                                        .Select(x => x.Trim())
-                                        .ToList();
+            // Split display columns
+            var columns = displayColumns
+                .Split(',')
+                .Select(x => x.Trim())
+                .ToList();
+
+            // Call stored procedure using Dapper
+            var result = await _context.GetAllAsync<dynamic>(
+                "usp_CommonSearch",
+                new
+                {
+                    TableName = tableName,
+                    ColumnId = columnId,
+                    DisplayColumns = displayColumns,
+                    SearchTerm = searchTerm ?? string.Empty,
+                    OtherCondition = otherCondition ?? string.Empty,
+                    SortBy = sortBy ?? string.Empty
+                }
+            );
 
             var data = new List<CommonSearchRowDto>();
 
-            using var con = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("usp_CommonSearch", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@TableName", tableName);
-            cmd.Parameters.AddWithValue("@ColumnId", columnId);
-            cmd.Parameters.AddWithValue("@DisplayColumns", displayColumns);
-            cmd.Parameters.AddWithValue("@SearchTerm", searchTerm ?? "");
-            cmd.Parameters.AddWithValue("@OtherCondition", otherCondition ?? "");
-            cmd.Parameters.AddWithValue("@SortBy", sortBy ?? "");
-
-            await con.OpenAsync();
-            using var reader = await cmd.ExecuteReaderAsync();
-
-            while (await reader.ReadAsync())
+            foreach (var row in result)
             {
-                var row = new CommonSearchRowDto
+                var dict = (IDictionary<string, object>)row;
+
+                var dto = new CommonSearchRowDto
                 {
-                    Id = Convert.ToInt32(reader["Id"]),
-                    Columns = new Dictionary<string, string>()
+                    Id = Convert.ToInt32(dict["Id"])
                 };
 
                 foreach (var col in columns)
-                    row.Columns[col] = reader[col]?.ToString();
+                {
+                    dto.Columns[col] = dict[col]?.ToString();
+                }
 
-                data.Add(row);
+                data.Add(dto);
             }
 
             return new CommonSearchResponseDto
