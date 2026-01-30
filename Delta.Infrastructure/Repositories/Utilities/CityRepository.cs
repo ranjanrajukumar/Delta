@@ -2,6 +2,7 @@
 using Delta.Application.Interfaces.Utilities;
 using Delta.Infrastructure.Persistence.Dapper;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Delta.Infrastructure.Repositories.Utilities
@@ -17,47 +18,72 @@ namespace Delta.Infrastructure.Repositories.Utilities
 
         public async Task<IEnumerable<CityDto>> GetAllAsync()
         {
-            const string query =
-                "SELECT CityId, CityName FROM city WHERE delstatus = 0";
+            var sql = new StringBuilder();
+            sql.Append("SELECT CityId, CityName ");
+            sql.Append("FROM City ");
+            sql.Append("WHERE DelStatus = 0;");
 
-            return await _context.GetAllAsync<CityDto>(query, new { });
+            return await _context.GetAllAsync<CityDto>(
+                sql.ToString(),
+                null
+            );
         }
 
         public async Task<CityDto?> GetByIdAsync(int cityId)
         {
-            const string query =
-                "SELECT CityId, CityName FROM city WHERE CityId = @CityId AND delstatus = 0";
+            var sql = new StringBuilder();
+            sql.Append("SELECT CityId, CityName ");
+            sql.Append("FROM City ");
+            sql.Append("WHERE CityId = @CityId ");
+            sql.Append("AND DelStatus = 0;");
 
-            return await _context.GetAsync<CityDto>(query, new { CityId = cityId });
+            return await _context.GetAsync<CityDto>(
+                sql.ToString(),
+                new { CityId = cityId }
+            );
         }
 
         public async Task<int> AddAsync(CityDto cityDto)
         {
-            const string query = @"
-                INSERT INTO city (CityName, delstatus)
-                VALUES (@CityName, 0);
-                SELECT CAST(SCOPE_IDENTITY() as int);";
+            var sql = new StringBuilder();
+            sql.Append("INSERT INTO City (CityName, DelStatus) ");
+            sql.Append("VALUES (@CityName, 0); ");
+            sql.Append("SELECT CAST(SCOPE_IDENTITY() AS INT);");
 
-            return await _context.ExecuteScalarAsync<int>(query, cityDto);
+            return await _context.ExecuteScalarAsync<int>(
+                sql.ToString(),
+                cityDto
+            );
         }
 
         public async Task<bool> UpdateAsync(CityDto cityDto)
         {
-            const string query = @"
-                UPDATE city
-                SET CityName = @CityName
-                WHERE CityId = @CityId AND delstatus = 0";
+            var sql = new StringBuilder();
+            sql.Append("UPDATE City ");
+            sql.Append("SET CityName = @CityName ");
+            sql.Append("WHERE CityId = @CityId ");
+            sql.Append("AND DelStatus = 0;");
 
-            var rows = await _context.EditDataAsync(query, cityDto);
+            var rows = await _context.EditDataAsync(
+                sql.ToString(),
+                cityDto
+            );
+
             return rows > 0;
         }
 
         public async Task<bool> DeleteAsync(int cityId)
         {
-            const string query =
-                "UPDATE city SET delstatus = 1 WHERE CityId = @CityId";
+            var sql = new StringBuilder();
+            sql.Append("UPDATE City ");
+            sql.Append("SET DelStatus = 1 ");
+            sql.Append("WHERE CityId = @CityId;");
 
-            var rows = await _context.EditDataAsync(query, new { CityId = cityId });
+            var rows = await _context.EditDataAsync(
+                sql.ToString(),
+                new { CityId = cityId }
+            );
+
             return rows > 0;
         }
     }
