@@ -10,4 +10,5 @@
   <Project Path="Delta.Domain/Delta.Domain.csproj" Id="6f1f0b63-9354-489c-9de6-b6b88c4b9b7a" />
   <Project Path="Delta.Infrastructure/Delta.Infrastructure.csproj" Id="8674f655-d4be-4a06-9416-73ed929f5bce" />
   <Project Path="Delta.Shared/Delta.Shared.csproj" Id="c1ce4782-469a-43ed-b006-19db7d00c7b5" />
+  <Project Path="Delta.Tests/Delta.Tests.csproj" Id="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
 </Solution>

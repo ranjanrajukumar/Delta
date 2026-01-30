@@ -37,5 +37,11 @@ namespace Delta.Infrastructure.Persistence.Dapper
             using var db = CreateConnection();
             return await db.QueryFirstOrDefaultAsync<T>(command, parameters);
         }
+
+        public async Task<T> ExecuteScalarAsync<T>(string command, object parameters)
+        {
+            using var db = CreateConnection();
+            return await db.ExecuteScalarAsync<T>(command, parameters);
+        }
     }
 }

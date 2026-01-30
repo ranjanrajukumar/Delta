@@ -65,7 +65,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IMenuFormRightsRepository, MenuFormRightsRepository>();
-
+builder.Services.AddScoped<ICityRepository, CityRepository>();
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<MenuService>();
@@ -128,11 +128,11 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // ---------------------- Middleware Pipeline ----------------------
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
