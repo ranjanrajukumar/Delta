@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Delta.Domain.Entities.Utilities
+namespace Delta.Application.DTOs.Utilities
 {
-    public class ICity
+    public class CityDto
     {
         public int CityId { get; set; }
         public string CityName { get; set; }
